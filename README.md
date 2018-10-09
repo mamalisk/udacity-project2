@@ -1,0 +1,1 @@
+Run 'npm run build' and then 'npm start' to test the app

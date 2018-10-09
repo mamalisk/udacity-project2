@@ -1,0 +1,22 @@
+{
+  "name": "kostas_project_2",
+  "version": "1.0.0",
+  "description": "Kostas Project 2",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src -d lib",
+    "start": "node lib/simpleChain.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kostas Mamalis",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "crypto-js": "^3.1.9-1",
+    "level": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.2",
+    "@babel/core": "7.1.2",
+    "@babel/preset-es2017": "^7.0.0-beta.53"
+  }
+}
