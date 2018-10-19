@@ -3,27 +3,16 @@
 |  =========================================================*/
 
 const SHA256 = require('crypto-js/sha256');
-const Persistence = require('./levelSandbox');
+const Persistence = require('./services/persistence');
+const Block = require('./models/block');
 
-/* ===== Block Class ==============================
-|  Class with a constructor for block 			   |
-|  ===============================================*/
-
-class Block{
-	constructor(data){
-     this.hash = "",
-     this.height = 0,
-     this.body = data,
-     this.time = 0,
-     this.previousBlockHash = ""
-    }
-}
-
-/* ===== Blockchain Class ==========================
-|  Class with a constructor for new blockchain 		|
-|  ================================================*/
-
+/**
+ * The definition of our Private blockchain
+ *
+ * @class Blockchain
+ */
 class Blockchain{
+  
   constructor(){
     this.chain = new Persistence('chaindata');
     this.getBlockHeight().then((height) => {
@@ -119,16 +108,4 @@ class Blockchain{
     }
 }
 
-let blockchain = new Blockchain();
-
-(function theLoop (i) {
-  setTimeout(() => {
-    blockchain.addBlock(new Block(`Test data ${i}`)).then(() => {
-      if (--i) {
-        theLoop(i)
-      }
-    })
-  }, 100);
-})(10);
-
-setTimeout(() => blockchain.validateChain(), 2000)
+module.exports = Blockchain;

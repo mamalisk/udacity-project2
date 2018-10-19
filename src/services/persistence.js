@@ -4,11 +4,21 @@
 
 const level = require('level');
 
+/**
+ * Provides an abstraction layer for persistence using 'LevelDB'
+ *
+ * @class Persistence
+ */
 class Persistence {
   constructor(dbName){
     this.db = level(dbName);
   }
 
+  /**
+   * Adds Data to LevelDB given:
+   * @param {string} key 
+   * @param {any} value 
+   */
   addLevelDBData(key, value) {
     return new Promise((resolve, reject) => {
         this.db.put(key, value, (err) => {
@@ -21,6 +31,13 @@ class Persistence {
     });
   }
 
+  /**
+   * Returns all data stored on LevelDB
+   * given:
+   * @param {string} key
+   * @returns a Promisified array of JSON objects
+   * @memberof Persistence
+   */
   getLevelDBData(key) {
     return new Promise((resolve, reject) => {
       this.db.get(key, (err, value) => {
@@ -33,6 +50,10 @@ class Persistence {
     });
   }
 
+  /**
+   * @returns a promisified size of the LevelDB
+   * @memberof Persistence
+   */
   getLength() {
     let i = -1;
     return new Promise((resolve, reject) => {
@@ -50,7 +71,7 @@ class Persistence {
             reject(err);
         }).on('close', () => {
            console.log('Block #' + key);
-           this.addLevelDBData(key, value).then( resolved => resolve("success!")).catch(error => {
+           this.addLevelDBData(key, value).then( resolved => resolve(value)).catch(error => {
              reject(error);
            });
         });
@@ -58,19 +79,5 @@ class Persistence {
   }
 }
 
-
-// Add data to levelDB with value
-
-
-/* ===== Testing ==============================================================|
-|  - Self-invoking function to add blocks to chain                             |
-|  - Learn more:                                                               |
-|   https://scottiestech.info/2014/07/01/javascript-fun-looping-with-a-delay/  |
-|                                                                              |
-|  * 100 Milliseconds loop = 36,000 blocks per hour                            |
-|     (13.89 hours for 500,000 blocks)                                         |
-|    Bitcoin blockchain adds 8640 blocks per day                               |
-|     ( new block every 10 minutes )                                           |
-|  ===========================================================================*/
 module.exports = Persistence;
 
