@@ -55,7 +55,7 @@ Example response:
 
 If any of the above rules is violated the JSON of the relevant error is return with code 400 ()
 
-Successful creation of a block should return it's JSON representation, e.g.:
+Successful creation of a block should return its JSON representation, e.g.:
 
 `
     {
