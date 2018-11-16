@@ -11,15 +11,24 @@
   "author": "Kostas Mamalis",
   "license": "UNLICENSED",
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "@babel/plugin-proposal-object-rest-spread": "7.0.0",
+    "bitcoinjs-lib": "^4.0.2",
+    "bitcoinjs-message": "^2.0.0",
+    "body-parser": "^1.18.3",
     "crypto-js": "^3.1.9-1",
     "errorhandler": "^1.5.0",
     "express": "4.16.4",
+    "hex2ascii": "0.0.3",
     "level": "^4.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.1.2",
     "@babel/core": "7.1.2",
     "@babel/preset-es2017": "^7.0.0-beta.53"
+  },
+  "babel": {
+    "plugins": [
+      "@babel/plugin-proposal-object-rest-spread"
+    ]
   }
 }

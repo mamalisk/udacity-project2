@@ -39,15 +39,54 @@ class Persistence {
    * @memberof Persistence
    */
   getLevelDBData(key) {
+      console.log('key', key);
     return new Promise((resolve, reject) => {
       this.db.get(key, (err, value) => {
-        if(err) { 
-          reject(err);
-          console.log('Not found!', err);
-        }
-        resolve(value);
+          if(err) {
+              if (err.type == 'NotFoundError') {
+                  resolve(undefined);
+              } else {
+                  console.log('Block ' + key + ' get failed', err);
+                  reject(err);
+              }
+          }
+          else {
+              console.log('resolved!!!');
+              resolve(value);
+          }
       });
     });
+  }
+
+  getByDataAttribute(dataKey, dataValue) {
+      let block = null;
+      return new Promise((resolve, reject) => {
+          this.db.createReadStream().on('data', data =>  {
+              if(JSON.parse(data.value)[dataKey] === dataValue) {
+                  block = JSON.parse(data.value);
+              }
+          }).on('error', function(err) {
+              reject(err);
+          }).on('close', () => resolve(block));
+      })
+  }
+
+    getAllByBodyAttribute(bodyKey, bodyValue) {
+      let blocks = [];
+      return new Promise((resolve, reject) => {
+          this.db.createReadStream().on('data', data =>  {
+              if(JSON.parse(data.value).body[bodyKey] === bodyValue) {
+                  blocks.push(JSON.parse(data.value));
+              }
+              console.log(blocks);
+          }).on('error', function(err) {
+              console.log('errorita');
+              reject(err);
+          }).on('close', () => {
+              console.log('resolved!');
+              resolve(blocks);
+          });
+      })
   }
 
   /**

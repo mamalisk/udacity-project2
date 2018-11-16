@@ -50,8 +50,13 @@ Example response:
 * **POST** `/block/` should create a new block if the payload exists and it has the following format:
 
 ` {
-    "data": "string content of the block"
-}`
+  "address": "19xaiMqayaNrn3x7AjV5cU4Mk5f5prRVpL",
+      "star": {
+              "dec": "68° 52' 56.9",
+              "ra": "16h 29m 1.0s",
+              "story": "Found star using https://www.google.com/sky/"
+          }
+  }`
 
 If any of the above rules is violated the JSON of the relevant error is return with code 400 ()
 
@@ -59,10 +64,64 @@ Successful creation of a block should return its JSON representation, e.g.:
 
 `
     {
-        "hash": "b6afcadfe1005010bf0350896ed8c44f295eb4e85c00d2e0d952f28324009126",
-        "height": 52,
-        "body": "the body of the block...",
-        "time": "1540038851",
-        "previousBlockHash": "48e20f3a3319321d3414c04e6d4b5736a822e3d04aa84e392ae44734d3f61fcb"
+         "hash": "a59e9e399bc17c2db32a7a87379a8012f2c8e08dd661d7c0a6a4845d4f3ffb9f",
+          "height": 1,
+          "body": {
+               "address": "142BDCeSGbXjWKaAnYXbMpZ6sbrSAo3DpZ",
+               "star": {
+                    "ra": "16h 29m 1.0s",
+                    "dec": "-26° 29' 24.9",
+                    "story": 
+            "466f756e642073746172207573696e672068747470733a2f2f7777772e676f6f676c652e636f6d2f736b792f",
+                    "storyDecoded": "Found star using https://www.google.com/sky/"
+                 }
+           },
+          "time": "1532296234",
+           "previousBlockHash": "49cce61ec3e6ae664514d5fa5722d86069cf981318fc303750ce66032d0acff3"
     }
 `
+
+* **GET** `/block/{height}` returns a block given its height along with the star story decoded
+
+* **GET** `/stars/{:option}` :
+
+if `option: hash:<hash>` then the block with the specified hash is returned.
+if `option: address:<address>` then the block with the specified wallet address in body is returned.
+
+* **POST** `/requestValidation` creates a new request given a valid address:
+
+the payload is: 
+
+` {
+  "address": "19xaiMqayaNrn3x7AjV5cU4Mk5f5prRVpL"
+  }
+`
+
+and response is:
+
+`
+{
+    "walletAddress": "19xaiMqayaNrn3x7AjV5cU4Mk5f5prRVpL",
+    "requestTimeStamp": "1541605128",
+    "message": "19xaiMqayaNrn3x7AjV5cU4Mk5f5prRVpL:1541605128:starRegistry",
+    "validationWindow": 300
+}`
+
+* **POST** `/message-signature/validate` validates a message given a specific address and a signature
+
+upon successful request a response as follows is returned:
+
+`
+{
+    "registerStar": true,
+    "status": {
+        "address": "19xaiMqayaNrn3x7AjV5cU4Mk5f5prRVpL",
+        "requestTimeStamp": "1541605128",
+        "message": "19xaiMqayaNrn3x7AjV5cU4Mk5f5prRVpL:1541605128:starRegistry",
+        "validationWindow": 1760,
+        "messageSignature": true
+    }
+}
+`
+
+

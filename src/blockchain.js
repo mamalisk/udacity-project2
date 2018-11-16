@@ -32,7 +32,7 @@ class Blockchain{
     newBlock.height = currentHeight + 1;
     newBlock.time = new Date().getTime().toString().slice(0,-3);
     if(currentHeight >= 0){
-      let previousBlock = await this.getBlock(currentHeight);
+      let previousBlock = await this.getBlockByHeight(currentHeight);
       console.log('previousBlock', previousBlock);
       const previousHash = previousBlock.hash;
       newBlock.previousBlockHash = previousBlock.hash;
@@ -49,14 +49,24 @@ class Blockchain{
       return await this.chain.getLength();
     }
 
-    // get block
-    async getBlock(blockHeight){
+    // get block by height
+    async getBlockByHeight(blockHeight){
       return JSON.parse(await this.chain.getLevelDBData(blockHeight))
+    }
+
+    // get star block by hash
+    async getBlockByHash(hash){
+        return await this.chain.getByDataAttribute('hash', hash);
+    }
+
+    // get star block by wallet address
+    async getBlockByWalletAddress(address){
+        return await this.chain.getAllByBodyAttribute('address', address);
     }
 
     // validate block
     async validateBlock(blockHeight){
-      let block = await this.getBlock(blockHeight);
+      let block = await this.getBlockByHeight(blockHeight);
       const actualBlockHash = block.hash;    
       block.hash = '';
       const validHash = SHA256(JSON.stringify(block)).toString();
@@ -77,7 +87,7 @@ class Blockchain{
 
       for (let i = 0; i < chainHeight; i++) {
         // validate block
-        const block = await this.getBlock(i);
+        const block = await this.getBlockByHeight(i);
         const validated = await this.validateBlock(block.height);
 
         if (!validated) {
